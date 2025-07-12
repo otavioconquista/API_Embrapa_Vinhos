@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Query, Path
+from fastapi import HTTPException, Query, Path
 import sqlite3
 import pandas as pd
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -6,6 +6,7 @@ from main_scraper import queries, db_filename
 from filtered_scraping import update_year_table
 from enum import Enum
 from datetime import datetime
+from main import app
 
 # Gera lista de anos de 1970 até o ano atual
 anos_disponiveis = [str(ano) for ano in range(1970, datetime.now().year)]
@@ -22,8 +23,6 @@ class NomeTabelaEnum(str, Enum):
 
 class AnoEnum(str, Enum):
     locals().update({ano: ano for ano in anos_disponiveis})
-
-app = FastAPI()
 
 @app.get("/tabela/{nome}/{ano}")
 def get_table(
