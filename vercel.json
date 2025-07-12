@@ -3,7 +3,7 @@
     "builds": [
       {
         "src": "main.py",
-        "use": "@vercel/aws-lambda-python"
+        "use": "@vercel/python"
       }
     ],
     "routes": [
