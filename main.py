@@ -1,4 +1,4 @@
-from fastapi import FastAPI
 from api import app
+from mangum import Mangum
 
-app = FastAPI()
+handler = Mangum(app)
