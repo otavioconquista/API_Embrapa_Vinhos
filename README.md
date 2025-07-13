@@ -3,7 +3,7 @@
 Disponibiliza via API dados sobre consumo, produção, importação e exportação de produtos de uva em relação ao Rio Grande do Sul.
 A fonte dos dados é um [site da Embrapa](http://vitibrasil.cnpuv.embrapa.br/).
 
-TL;DR: acesse a documentação da API [aqui](https://api-embrapa-vinhos.vercel.app/docs). 
+**TL;DR**: acesse a documentação da API [aqui](https://api-embrapa-vinhos.vercel.app/docs). 
 
 ## índice
 
@@ -13,8 +13,6 @@ TL;DR: acesse a documentação da API [aqui](https://api-embrapa-vinhos.vercel.a
 - 🖥️ Setup e funcionalidade geral;
 - 📞 Contatos.
 
----
-
 ## ⚙️ Tecnologias empregadas
 
 - FastAPI;
@@ -23,28 +21,24 @@ TL;DR: acesse a documentação da API [aqui](https://api-embrapa-vinhos.vercel.a
 - SQLite;
 - Vercel (para deploy).
 
----
-
 ## 📁 Estutura do projeto
 
-├── utils/
-│   ├── disclaimer.txt
-│   ├── SQLite_visualizer.py
-│   ├── total_scraping_to_excel.py
-|   ├── total_scraping_to_SQLite.py
-|   ├── vitibrasil_data.xlsx
-├── api.py
-├── filtered_scraping.py
-├── LICENSE.txt
-├── main_scraper.py
-├── README.md
-├── requirements.txt
-├── vercel.json
-└── vitibrasil_data.sqlite
+├── utils/  
+│   ├── disclaimer.txt  
+│   ├── SQLite_visualizer.py  
+│   ├── total_scraping_to_excel.py  
+│   ├── total_scraping_to_SQLite.py  
+│   ├── vitibrasil_data.xlsx  
+├── api.py  
+├── filtered_scraping.py  
+├── LICENSE.txt  
+├── main_scraper.py  
+├── README.md  
+├── requirements.txt  
+├── vercel.json  
+└── vitibrasil_data.sqlite  
 
 A pasta utils contém 3 arquivos Python utilizados para desenvolvimento e teste da aplicação. Os demais arquivos da raiz são vitais para o funcionamento geral.
-
----
 
 ## 🏛️ Arquitetura
 
@@ -52,42 +46,42 @@ A aplicação como um todo é regida e executada pelo arquivo api.py. Através d
 
 O deploy foi feito usando Vercel. Para configuração do Vercel, há o arquivo vercel.json. A cada atualização do repositório, temos um novo deploy automático.
 
-- 🖥️ Setup e funcionalidade geral;
+## 🖥️ Setup e funcionalidade geral
 
 ### Para fazer a aplicação rodar localmente:
 
-1 - Abra o terminal;
-2 - Rode "git clone https://github.com/otavioconquista/API_Embrapa_Vinhos.git";
-3 - Crie um ambiente virtual com "python -m venv venv";
-4 - Ative o ambiente virtual com "venv\Scripts\activate";
-5 - Instale as dependências rodando "pip install -r requirements.txt".
-6 - Rode ""uvicorn api:app --reload".
+1 - Abra o terminal;  
+2 - Rode "git clone https://github.com/otavioconquista/API_Embrapa_Vinhos.git";  
+3 - Crie um ambiente virtual com "python -m venv venv";  
+4 - Ative o ambiente virtual com "venv\Scripts\activate";  
+5 - Instale as dependências rodando "pip install -r requirements.txt";  
+6 - Rode "uvicorn api:app --reload".  
 
-A aplicação estará ativa no endereço http://127.0.0.1:8000. Para seguir com uma requisição, siga o padrão:
+A aplicação estará ativa no endereço http://127.0.0.1:8000.
 
-http://localhost:8000/tabela/X/Y?formato=Z.
+Para seguir com uma requisição, siga o padrão: http://localhost:8000/tabela/X/Y?formato=Z.
 
 Onde X é a tabela a ser consultada, Y é o ano a ser filtrado e Z é o formato da response body.
 
-X pode ser Producao, ProcessamentoViniferas, ProcessamentoAmericanaseh, ProcessamentoUvasdemesa, Processamentosemclassific, Comercializacao, ImportacaoVinhosdemesa, ImportacaoEspumantes, ImportacaoUvasfrescas, ImportacaoUvaspassas, ImportacaoSucodeuva, ExportacaoVinhosdemesa, ExportacaoEspumantes, ExportacaoUvasfrescas, ExportacaoSucodeuva.
+- X pode ser Producao, ProcessamentoViniferas, ProcessamentoAmericanaseh, ProcessamentoUvasdemesa, Processamentosemclassific, Comercializacao, ImportacaoVinhosdemesa, ImportacaoEspumantes, ImportacaoUvasfrescas, ImportacaoUvaspassas, ImportacaoSucodeuva, ExportacaoVinhosdemesa, ExportacaoEspumantes, ExportacaoUvasfrescas, ExportacaoSucodeuva.
 
-Y pode ser qualquer ano desde 1970.
+- Y pode ser qualquer ano desde 1970.
 
-Z pode ser html ou json.
+- Z pode ser html ou json.
 
-Um exemplo de requisição local: http://localhost:8000/tabela/Producao/2016?formato=json
+Um exemplo de requisição local: http://localhost:8000/tabela/Producao/2016?formato=json.
 
 ### Para fazer a aplicação rodar remotamente:
 
 É necessário abrir uma conta no Vercel, conectar a conta em um repositório GitHub contendo a aplicação e fazer o deploy. Esta aplicação já se encontra em funcionamento.
 
-Remotamente, pode ser acessada no endereço: https://api-embrapa-vinhos.vercel.app. Para fazer uma requisição, siga exatamente a estrutura da requisição local. Exemplo: https://api-embrapa-vinhos.vercel.app/tabela/Producao/2016?formato=html
+Remotamente, pode ser acessada no endereço: https://api-embrapa-vinhos.vercel.app. Para fazer uma requisição, siga exatamente a estrutura da requisição local.
 
----
+Exemplo: https://api-embrapa-vinhos.vercel.app/tabela/Producao/2019?formato=json.
 
 ## 📞 Contatos
 
-- Acesse meu LinkedIn [aqui](www.linkedin.com/in/otavioconquista)
+- Acesse meu LinkedIn [aqui](https://www.linkedin.com/in/otavioconquista)
 - e-Mail: otavio1204@gmail.com
 
 ---

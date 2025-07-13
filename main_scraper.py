@@ -7,40 +7,40 @@ from datetime import datetime
 db_filename = 'vitibrasil_data.sqlite'
 
 def scrape_table(url):
-    # Make request to the webpage
+    # Faz a requisição HTTP para obter o conteúdo da página
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
     
-    # Find the table
+    # Encontra a tabela na página
     table = soup.find('table', class_='tb_base tb_dados')
     
     if table is None:
         return None
     
-    # Extract data from the table
+    # Inicializa listas para armazenar os dados e os cabeçalhos
     data = []
     headers = []
     
-    # Get headers
+    # Adiciona os cabeçalhos da tabela
     for th in table.find_all('th'):
         headers.append(th.text.strip())
     
-    # Get rows
-    for row in table.find_all('tr')[1:]:  # Skip header row
+    # Adiciona os dados da tabela
+    for row in table.find_all('tr')[1:]:  # Ignora o cabeçalho
         row_data = []
         for cell in row.find_all(['td', 'th']):
             row_data.append(cell.text.strip())
-        if row_data:  # Only append non-empty rows
+        if row_data:  # Verifica se a linha não está vazia
             data.append(row_data)
     
-    # Create DataFrame
+    # Cria o DataFrame
     df = pd.DataFrame(data, columns=headers)
     return df
 
-# Base URL
+# URL base
 base_url = "http://vitibrasil.cnpuv.embrapa.br/index.php"
 
-# Dictionary of all queries and their descriptions
+# Dicionário de queries
 queries = {
     "Producao": "opcao=opt_02",
     "Processamento_Viniferas": "subopcao=subopt_01&opcao=opt_03",

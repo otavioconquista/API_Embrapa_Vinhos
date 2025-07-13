@@ -4,7 +4,7 @@ from main_scraper import scrape_table, queries, base_url, anos, db_filename
 # Cria conexão com o banco SQLite
 conn = sqlite3.connect(db_filename)
 
-# Scrape each table and save to SQLite database
+# Faz o scraping para cada query e ano
 for description, query in queries.items():
     for ano in anos:
         #print(f"Scraping {description} - {ano}...")
