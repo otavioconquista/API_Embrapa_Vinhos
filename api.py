@@ -47,7 +47,7 @@ def get_table(
     try:
         update_year_table(descricao, query, ano.value, db_filename=db_filename)
     except Exception as e:
-        # Log opcional: print(f"Scraping falhou: {e}")
+        print(f"Scraping falhou: {e}")
         pass  # Continua para buscar do banco
 
     table_name = ''.join(e for e in nome if e.isalnum())[:25]
