@@ -26,22 +26,22 @@ TL;DR: acesse a documentação da API [aqui](https://api-embrapa-vinhos.vercel.a
 ---
 
 ## 📁 Estutura do projeto
-
+'''
 ├── utils/
 │   ├── disclaimer.txt
 │   ├── SQLite_visualizer.py
 │   ├── total_scraping_to_excel.py
-|   ├── total_scraping_to_SQLite.py
-|   ├── vitibrasil_data.xlsx
-├── api.py
-├── filtered_scraping.py
-├── LICENSE.txt
-├── main_scraper.py
-├── README.md
-├── requirements.txt
-├── vercel.json
+│   ├── total_scraping_to_SQLite.py
+│   ├── vitibrasil_data.xlsx
+│── api.py
+│── filtered_scraping.py
+│── LICENSE.txt
+│── main_scraper.py
+│── README.md
+│── requirements.txt
+│── vercel.json
 └── vitibrasil_data.sqlite
-
+'''
 A pasta utils contém 3 arquivos Python utilizados para desenvolvimento e teste da aplicação. Os demais arquivos da raiz são vitais para o funcionamento geral.
 
 ---
@@ -81,13 +81,13 @@ Um exemplo de requisição local: http://localhost:8000/tabela/Producao/2016?for
 
 É necessário abrir uma conta no Vercel, conectar a conta em um repositório GitHub contendo a aplicação e fazer o deploy. Esta aplicação já se encontra em funcionamento.
 
-Remotamente, pode ser acessada no endereço: https://api-embrapa-vinhos.vercel.app. Para fazer uma requisição, siga exatamente a estrutura da requisição local. Exemplo: https://api-embrapa-vinhos.vercel.app/tabela/Producao/2016?formato=html
+Remotamente, pode ser acessada no endereço: https://api-embrapa-vinhos.vercel.app. Para fazer uma requisição, siga exatamente a estrutura da requisição local. Exemplo: https://api-embrapa-vinhos.vercel.app/tabela/Producao/2019?formato=json
 
 ---
 
 ## 📞 Contatos
 
-- Acesse meu LinkedIn [aqui](www.linkedin.com/in/otavioconquista)
+- Acesse meu LinkedIn [aqui](https://www.linkedin.com/in/otavioconquista)
 - e-Mail: otavio1204@gmail.com
 
 ---
