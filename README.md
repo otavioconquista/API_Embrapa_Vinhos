@@ -46,7 +46,7 @@ A aplicação como um todo é regida e executada pelo arquivo api.py. Através d
 
 O deploy foi feito usando Vercel. Para configuração do Vercel, há o arquivo vercel.json. A cada atualização do repositório, temos um novo deploy automático.
 
-## 🖥️ Setup e funcionalidade geral;
+## 🖥️ Setup e funcionalidade geral
 
 ### Para fazer a aplicação rodar localmente:
 
@@ -57,9 +57,9 @@ O deploy foi feito usando Vercel. Para configuração do Vercel, há o arquivo v
 5 - Instale as dependências rodando "pip install -r requirements.txt";  
 6 - Rode "uvicorn api:app --reload".  
 
-A aplicação estará ativa no endereço http://127.0.0.1:8000. Para seguir com uma requisição, siga o padrão:
+A aplicação estará ativa no endereço http://127.0.0.1:8000.
 
-http://localhost:8000/tabela/X/Y?formato=Z.
+Para seguir com uma requisição, siga o padrão: http://localhost:8000/tabela/X/Y?formato=Z.
 
 Onde X é a tabela a ser consultada, Y é o ano a ser filtrado e Z é o formato da response body.
 
@@ -69,13 +69,13 @@ Onde X é a tabela a ser consultada, Y é o ano a ser filtrado e Z é o formato 
 
 - Z pode ser html ou json.
 
-Um exemplo de requisição local: http://localhost:8000/tabela/Producao/2016?formato=json
+Um exemplo de requisição local: http://localhost:8000/tabela/Producao/2016?formato=json.
 
 ### Para fazer a aplicação rodar remotamente:
 
 É necessário abrir uma conta no Vercel, conectar a conta em um repositório GitHub contendo a aplicação e fazer o deploy. Esta aplicação já se encontra em funcionamento.
 
-Remotamente, pode ser acessada no endereço: https://api-embrapa-vinhos.vercel.app. Para fazer uma requisição, siga exatamente a estrutura da requisição local. Exemplo: https://api-embrapa-vinhos.vercel.app/tabela/Producao/2019?formato=json
+Remotamente, pode ser acessada no endereço: https://api-embrapa-vinhos.vercel.app. Para fazer uma requisição, siga exatamente a estrutura da requisição local. Exemplo: https://api-embrapa-vinhos.vercel.app/tabela/Producao/2019?formato=json.
 
 ## 📞 Contatos
 
