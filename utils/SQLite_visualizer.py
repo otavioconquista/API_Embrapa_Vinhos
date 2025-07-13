@@ -1,5 +1,6 @@
 import sqlite3
 
+#Query para mostrar o esquema de uma tabela
 def show_schema(table_name, db_filename='vitibrasil_data.sqlite'):
     conn = sqlite3.connect(db_filename)
     cursor = conn.cursor()
@@ -9,7 +10,7 @@ def show_schema(table_name, db_filename='vitibrasil_data.sqlite'):
     for col in schema:
         print(col)
 
-#Query para mostrar o esquema de uma tabela específica e seus dados
+#Query para mostrar os dados de uma tabela
 def show_table_data(table_name, db_filename='vitibrasil_data.sqlite'):
     conn = sqlite3.connect(db_filename)
     cursor = conn.cursor()
@@ -57,4 +58,4 @@ def show_year_data(table_name, year, db_filename='vitibrasil_data.sqlite'):
 #show_schema("ProcessamentodeViníferas")
 #show_table_data("ImportaçãodeEspumantes")
 #show_years("ImportaçãodeEspumantes")
-show_year_data("ExportaçãodeUvasFrescas", 1971)
+#show_year_data("ExportaçãodeUvasFrescas", 1971)

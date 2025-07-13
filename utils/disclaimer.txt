@@ -1,1 +1,1 @@
-These documents are for developing and testing purposes. It's necessary to realocate them to the root diretory in order to run.
+These documents are for developing and testing purposes. It's necessary to realocate them to the root directory in order to run.

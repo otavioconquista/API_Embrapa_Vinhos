@@ -75,7 +75,9 @@ Um exemplo de requisição local: http://localhost:8000/tabela/Producao/2016?for
 
 É necessário abrir uma conta no Vercel, conectar a conta em um repositório GitHub contendo a aplicação e fazer o deploy. Esta aplicação já se encontra em funcionamento.
 
-Remotamente, pode ser acessada no endereço: https://api-embrapa-vinhos.vercel.app. Para fazer uma requisição, siga exatamente a estrutura da requisição local. Exemplo: https://api-embrapa-vinhos.vercel.app/tabela/Producao/2019?formato=json.
+Remotamente, pode ser acessada no endereço: https://api-embrapa-vinhos.vercel.app. Para fazer uma requisição, siga exatamente a estrutura da requisição local.
+
+Exemplo: https://api-embrapa-vinhos.vercel.app/tabela/Producao/2019?formato=json.
 
 ## 📞 Contatos
 
