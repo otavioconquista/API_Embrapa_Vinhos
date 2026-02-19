@@ -1,20 +1,32 @@
-import sqlite3
 from main_scraper import scrape_table, base_url
+from db import get_connection
 
-def update_year_table(descricao, query, ano, db_filename='vitibrasil_data.sqlite'):
+def update_year_table(descricao, query, ano):
     url = f"{base_url}?ano={ano}&{query}"
     print(f"[INFO] Buscando dados para '{descricao}' do ano {ano} na URL: {url}")
     df = scrape_table(url)
     if df is not None and not df.empty:
         table_name = ''.join(e for e in descricao if e.isalnum())[:25]
-        print(f"[INFO] Dados encontrados. Atualizando tabela '{table_name}' no banco '{db_filename}'...")
+        print(f"[INFO] Dados encontrados. Atualizando tabela '{table_name}'...")
         df.insert(0, "Ano", ano)
-        conn = sqlite3.connect(db_filename)
+        conn = get_connection()
+
+        # Cria a tabela se não existir
+        cols_def = ', '.join([f'[{c}] TEXT' for c in df.columns])
+        conn.execute(f'CREATE TABLE IF NOT EXISTS [{table_name}] ({cols_def})')
+
+        # Remove linhas antigas do ano
         print(f"[INFO] Removendo linhas antigas do ano {ano} na tabela '{table_name}'...")
-        conn.execute(f"DELETE FROM {table_name} WHERE Ano = ?", (ano,))
+        conn.execute(f"DELETE FROM [{table_name}] WHERE Ano = ?", (ano,))
+
+        # Insere novas linhas
         print(f"[INFO] Inserindo novas linhas para o ano {ano} na tabela '{table_name}'...")
-        df.to_sql(table_name, conn, if_exists='append', index=False)
-        conn.close()
+        placeholders = ', '.join(['?' for _ in df.columns])
+        cols = ', '.join([f'[{c}]' for c in df.columns])
+        for _, row in df.iterrows():
+            conn.execute(f'INSERT INTO [{table_name}] ({cols}) VALUES ({placeholders})', tuple(row))
+        
+        conn.commit()
         print(f"[SUCESSO] Tabela '{table_name}' atualizada para o ano {ano}.")
         print(url)
     else:

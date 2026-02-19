@@ -3,9 +3,6 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-# Nome do banco SQLite
-db_filename = 'vitibrasil_data.sqlite'
-
 def scrape_table(url):
     # Faz a requisição HTTP para obter o conteúdo da página
     response = requests.get(url)

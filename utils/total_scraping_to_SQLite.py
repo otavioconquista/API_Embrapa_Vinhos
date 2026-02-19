@@ -1,18 +1,17 @@
-import sqlite3
-from main_scraper import scrape_table, queries, base_url, anos, db_filename
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
-# Cria conexão com o banco SQLite
-conn = sqlite3.connect(db_filename)
+from main_scraper import scrape_table, queries, base_url, anos
+from db import get_connection
+
+# Cria conexão com o Turso
+conn = get_connection()
 
 # Faz o scraping para cada query e ano
 for description, query in queries.items():
     for ano in anos:
-        #print(f"Scraping {description} - {ano}...")
-        # Adiciona o parâmetro ano à query
-        if "ano=" in query:
-            url = f"{base_url}?ano={ano}&{query}"
-        else:
-            url = f"{base_url}?ano={ano}&{query}"
+        url = f"{base_url}?ano={ano}&{query}"
         df = scrape_table(url)
         
         if df is not None and not df.empty:
@@ -20,8 +19,18 @@ for description, query in queries.items():
             table_name = ''.join(e for e in description if e.isalnum())[:25]
             # Adiciona o ano como coluna
             df.insert(0, "Ano", ano)
-            # Salva no banco, acumulando os dados (append)
-            df.to_sql(table_name, conn, if_exists='append', index=False)
 
-conn.close()
-print(f"\nDados salvos no banco {db_filename}")
+            # Cria a tabela se não existir
+            cols_def = ', '.join([f'[{c}] TEXT' for c in df.columns])
+            conn.execute(f'CREATE TABLE IF NOT EXISTS [{table_name}] ({cols_def})')
+
+            # Insere os dados
+            placeholders = ', '.join(['?' for _ in df.columns])
+            cols = ', '.join([f'[{c}]' for c in df.columns])
+            for _, row in df.iterrows():
+                conn.execute(f'INSERT INTO [{table_name}] ({cols}) VALUES ({placeholders})', tuple(row))
+            
+            conn.commit()
+            print(f"[OK] {table_name} - {ano}")
+
+print("\nDados salvos no Turso com sucesso!")

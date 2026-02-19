@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException, Query, Path
-import sqlite3
 import pandas as pd
 from fastapi.responses import HTMLResponse, JSONResponse
-from main_scraper import queries, db_filename
+from main_scraper import queries
 from filtered_scraping import update_year_table
+from db import get_connection
 from enum import Enum
 from datetime import datetime
 
@@ -43,21 +43,22 @@ def get_table(
     if not query:
         raise HTTPException(status_code=404, detail="Tabela não encontrada")
 
-    # Tenta atualizar via scraping; se falhar, usa apenas o banco local
+    # Tenta atualizar via scraping; se falhar, usa apenas o banco
     try:
-        update_year_table(descricao, query, ano.value, db_filename=db_filename)
+        update_year_table(descricao, query, ano.value)
     except Exception as e:
-        print(f"Scraping falhou: {e}")
+        print(f"[AVISO] Atualização falhou (usando dados existentes no banco): {e}")
         pass  # Continua para buscar do banco
 
     table_name = ''.join(e for e in nome if e.isalnum())[:25]
-    conn = sqlite3.connect(db_filename)
+    conn = get_connection()
     try:
-        df = pd.read_sql(f"SELECT * FROM '{table_name}' WHERE Ano = ?", conn, params=(ano.value,))
+        result = conn.execute(f"SELECT * FROM [{table_name}] WHERE Ano = ?", (ano.value,))
+        rows = result.fetchall()
+        columns = [desc[0] for desc in result.description]
+        df = pd.DataFrame(rows, columns=columns)
     except Exception:
-        conn.close()
         raise HTTPException(status_code=404, detail="Tabela não encontrada")
-    conn.close()
     if df.empty:
         raise HTTPException(status_code=404, detail="Nenhum dado encontrado para este ano nesta tabela")
     if formato == "html":
