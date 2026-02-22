@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Query, Path, Request
+from fastapi import FastAPI, HTTPException, Query, Path, Request, BackgroundTasks
 import pandas as pd
 from fastapi.responses import HTMLResponse, JSONResponse
 from main_scraper import queries
@@ -6,6 +6,7 @@ from filtered_scraping import update_year_table
 from db import get_connection
 from enum import Enum
 from datetime import datetime
+import time
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
@@ -39,14 +40,29 @@ async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
         content={"detail": "Muitas requisições. Tente novamente em breve."}
     )
 
+def registrar_log(ip, tabela, ano, formato, status, tempo_ms, user_agent, referer):
+    """Registra o uso da API no Turso (roda em background, após servir a resposta)."""
+    try:
+        conn = get_connection()
+        conn.execute(
+            """INSERT INTO api_logs (timestamp, ip, tabela, ano, formato, status, tempo_ms, user_agent, referer)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (datetime.now().isoformat(), ip, tabela, ano, formato, status, tempo_ms, user_agent, referer)
+        )
+        conn.commit()
+    except Exception as e:
+        print(f"[AVISO] Falha ao registrar log: {e}")
+
 @app.get("/tabela/{nome}/{ano}")
 @limiter.limit("10/minute")
 def get_table(
     request: Request,
+    background_tasks: BackgroundTasks,
     nome: NomeTabelaEnum = Path(..., description="Nome da tabela"),
     ano: AnoEnum = Path(..., description="Ano"),
     formato: str = Query("json", enum=["json", "html"])
 ):
+    inicio = time.time()
     # Busca a query e a descrição correspondente
     query = None
     descricao = None
@@ -77,6 +93,15 @@ def get_table(
         raise HTTPException(status_code=404, detail="Tabela não encontrada")
     if df.empty:
         raise HTTPException(status_code=404, detail="Nenhum dado encontrado para este ano nesta tabela")
+
+    tempo_ms = int((time.time() - inicio) * 1000)
+    ip = request.client.host if request.client else "desconhecido"
+    user_agent = request.headers.get("user-agent", "")
+    referer = request.headers.get("referer", "")
+
+    # Registra o log em background (após servir a resposta)
+    background_tasks.add_task(registrar_log, ip, nome.value, ano.value, formato, 200, tempo_ms, user_agent, referer)
+
     if formato == "html":
         return HTMLResponse(df.to_html(index=False, border=1))
     else:
