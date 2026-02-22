@@ -53,6 +53,14 @@ def registrar_log(ip, tabela, ano, formato, status, tempo_ms, user_agent, refere
     except Exception as e:
         print(f"[AVISO] Falha ao registrar log: {e}")
 
+@app.get("/")
+def root():
+    return {
+        "mensagem": "Bem vindo! Esta é a API Embrapa Vitivinicultura",
+        "documentacao": "https://api-embrapa-vinhos.vercel.app/docs",
+        "exemplo de uso": "https://api-embrapa-vinhos.vercel.app/tabela/Producao/2024?formato=json",
+    }
+
 @app.get("/tabela/{nome}/{ano}")
 @limiter.limit("10/minute")
 def get_table(
