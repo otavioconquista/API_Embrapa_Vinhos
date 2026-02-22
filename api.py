@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Query, Path
+from fastapi import FastAPI, HTTPException, Query, Path, Request
 import pandas as pd
 from fastapi.responses import HTMLResponse, JSONResponse
 from main_scraper import queries
@@ -6,6 +6,10 @@ from filtered_scraping import update_year_table
 from db import get_connection
 from enum import Enum
 from datetime import datetime
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 
 # Gera lista de anos de 1970 até o ano atual
 anos_disponiveis = [str(ano) for ano in range(1970, datetime.now().year)]
@@ -23,10 +27,22 @@ class NomeTabelaEnum(str, Enum):
 class AnoEnum(str, Enum):
     locals().update({ano: ano for ano in anos_disponiveis})
 
+limiter = Limiter(key_func=get_remote_address)
 app = FastAPI()
+app.state.limiter = limiter
+app.add_middleware(SlowAPIMiddleware)
+
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={"detail": "Muitas requisições. Tente novamente em breve."}
+    )
 
 @app.get("/tabela/{nome}/{ano}")
+@limiter.limit("10/minute")
 def get_table(
+    request: Request,
     nome: NomeTabelaEnum = Path(..., description="Nome da tabela"),
     ano: AnoEnum = Path(..., description="Ano"),
     formato: str = Query("json", enum=["json", "html"])
